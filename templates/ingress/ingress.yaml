@@ -2,13 +2,13 @@
 {{- $ingress := .Values.expose.ingress -}}
 {{- $tls := .Values.expose.tls -}}
 {{- if eq .Values.expose.ingress.controller "gce" }}
-  {{- $_ := set . "portal_path" "/*" -}}
   {{- $_ := set . "api_path" "/api/*" -}}
   {{- $_ := set . "service_path" "/service/*" -}}
   {{- $_ := set . "v2_path" "/v2/*" -}}
   {{- $_ := set . "chartrepo_path" "/chartrepo/*" -}}
   {{- $_ := set . "controller_path" "/c/*" -}}
   {{- $_ := set . "notary_path" "/" -}}
+  {{- $_ := set . "portal_path" "/*" -}}
 {{- else if eq .Values.expose.ingress.controller "ncp" }}
   {{- $_ := set . "portal_path" "/.*" -}}
   {{- $_ := set . "api_path" "/api/.*" -}}
