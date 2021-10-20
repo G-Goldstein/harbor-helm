@@ -67,6 +67,10 @@ spec:
   - http:
       paths:
 {{- if semverCompare "<1.19-0" .Capabilities.KubeVersion.GitVersion }}
+      - path: {{ .controller_path }}
+        backend:
+          serviceName: {{ template "harbor.core" . }}
+          servicePort: {{ template "harbor.core.servicePort" . }}
       - path: {{ .api_path }}
         backend:
           serviceName: {{ template "harbor.core" . }}
@@ -80,10 +84,6 @@ spec:
           serviceName: {{ template "harbor.core" . }}
           servicePort: {{ template "harbor.core.servicePort" . }}
       - path: {{ .chartrepo_path }}
-        backend:
-          serviceName: {{ template "harbor.core" . }}
-          servicePort: {{ template "harbor.core.servicePort" . }}
-      - path: {{ .controller_path }}
         backend:
           serviceName: {{ template "harbor.core" . }}
           servicePort: {{ template "harbor.core.servicePort" . }}
@@ -92,6 +92,13 @@ spec:
           serviceName: {{ template "harbor.portal" . }}
           servicePort: {{ template "harbor.portal.servicePort" . }}
 {{- else }}
+      - path: {{ .controller_path }}
+        pathType: Prefix
+        backend:
+          service:
+            name: {{ template "harbor.core" . }}
+            port:
+              number: {{ template "harbor.core.servicePort" . }}
       - path: {{ .api_path }}
         pathType: Prefix
         backend:
@@ -114,13 +121,6 @@ spec:
             port:
               number: {{ template "harbor.core.servicePort" . }}
       - path: {{ .chartrepo_path }}
-        pathType: Prefix
-        backend:
-          service:
-            name: {{ template "harbor.core" . }}
-            port:
-              number: {{ template "harbor.core.servicePort" . }}
-      - path: {{ .controller_path }}
         pathType: Prefix
         backend:
           service:
